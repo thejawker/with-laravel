@@ -1,25 +1,57 @@
 {
-  "name": "with-laravel",
-  "version": "0.0.1",
-  "description": "A simple package exposing a bunch of HOC's for working with Laravel and React.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "github.com/thejawker/with-laravel"
-  },
-  "keywords": [
-    "react",
-    "laravel"
-  ],
-  "author": "thejawker",
-  "license": "ISC",
-  "devDependencies": {
-    "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.3.0"
-  }
+    "name": "with-laravel",
+    "version": "0.0.7",
+    "description": "A simple package exposing a bunch of HOC's for working with Laravel and React.",
+    "main": "./lib/index.js",
+    "scripts": {
+        "clean": "rimraf lib NODE_ENV=production",
+        "test": "NODE_ENV=production mocha --compilers js:babel-register --recursive",
+        "test:watch": "npm test NODE_ENV=production -- --watch",
+        "test:examples": "node examples/ NODE_ENV=production",
+        "cover":
+            "NODE_ENV=production istanbul cover _mocha -- --compilers js:babel-register --recursive",
+        "lint": "eslint src test",
+        "build": "NODE_ENV=production babel src --out-dir lib",
+        "prepublish": "npm run clean && npm run build"
+    },
+    "files": ["index.js", "lib", "src"],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/thejawker/with-laravel.git"
+    },
+    "keywords": ["laravel", "react", "HOC", "higher order functions", "helpers", "material-ui"],
+    "author": "TheJawker bram.veerman@gmail.com",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/thejawker/with-laravel/issues"
+    },
+    "homepage": "https://github.com/thejawker/with-laravel/#readme",
+    "devDependencies": {
+        "babel": "^6.5.2",
+        "babel-cli": "^6.14.0",
+        "babel-eslint": "^7.0.0",
+        "babel-plugin-add-module-exports": "^0.2.1",
+        "babel-preset-es2015": "^6.14.0",
+        "babel-preset-stage-2": "^6.13.0",
+        "chai": "^3.5.0",
+        "cross-env": "^3.0.0",
+        "eslint": "^3.6.0",
+        "eslint-config-airbnb": "^13.0.0",
+        "eslint-plugin-import": "^2.0.0",
+        "eslint-plugin-jsx-a11y": "^2.2.2",
+        "eslint-plugin-react": "^6.3.0",
+        "istanbul": "^1.0.0-alpha",
+        "mocha": "^3.0.2",
+        "rimraf": "^2.5.4"
+    },
+    "dependencies": {
+        "axios": "^0.16.2",
+        "babel-plugin-transform-class-properties": "^6.24.1",
+        "babel-preset-es2017": "^6.24.1",
+        "babel-preset-react": "^6.24.1",
+        "prop-types": "^15.5.10",
+        "react": "^15.6.1",
+        "string": "^3.3.3",
+        "underscore": "^1.8.3"
+    }
 }
