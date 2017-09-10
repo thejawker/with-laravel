@@ -1,6 +1,6 @@
 {
     "name": "with-laravel",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "description": "A simple package exposing a bunch of HOC's for working with Laravel and React.",
     "main": "./lib/index.js",
     "scripts": {
@@ -14,7 +14,7 @@
         "build": "NODE_ENV=production babel src --out-dir lib",
         "prepublish": "npm run clean && npm run build"
     },
-    "files": ["index.js", "lib", "src"],
+    "files": ["README.md", "LICENSE", "lib", "src"],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/thejawker/with-laravel.git"

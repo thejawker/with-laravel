@@ -139,10 +139,7 @@ function withLaravelForm(
             event.preventDefault()
             this.setState({ sending: true })
 
-            const formData = {
-                ...this.constructFormFieldData(),
-                ...this.state.formFields,
-            }
+            const formData = this.getAllFormData()
 
             const params = this.getOption('params')
 
@@ -167,6 +164,11 @@ function withLaravelForm(
                 })
         }
 
+        getAllFormData = () => ({
+            ...this.constructFormFieldData(),
+            ...this.state.formFields,
+        })
+
         constructFormFieldData = () => {
             const formData = {}
 
@@ -187,6 +189,7 @@ function withLaravelForm(
                     textField: this.getTextFieldProps,
                     radioGroup: this.getRadioGroupProps,
                     errorMessage: this.state.message,
+                    getAllFormData: this.getAllFormData,
                     ...this.state,
                 },
             }
