@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { get as rawGet } from 'axios'
+import { get } from 'axios'
 
-const defaultOptions = { takeAtLeast: 0, endPoint: null, fetchEvery: null }
+const defaultOptions = { takeAtLeast: 0, endPoint: null, fetchEvery: null, config: null }
 
 function withLaravelPaginator(EnhancedComponent, options = defaultOptions) {
     return class LaravelPaginator extends Component {
@@ -10,6 +10,7 @@ function withLaravelPaginator(EnhancedComponent, options = defaultOptions) {
             endPoint: PropTypes.any,
             takeAtLeast: PropTypes.number,
             fetchEvery: PropTypes.number,
+            config: PropTypes.object,
         }
 
         static defaultProps = {
@@ -59,26 +60,31 @@ function withLaravelPaginator(EnhancedComponent, options = defaultOptions) {
             }
         }
 
+        rawGet = path => get(path, this.getOption('config'))
+
         getCurrentPage = () => {
-            this.retrieveFromEndPoint(rawGet(this.pageFromIndex(this.state.currentPageIndex)), true)
+            this.retrieveFromEndPoint(
+                this.rawGet(this.pageFromIndex(this.state.currentPageIndex)),
+                true,
+            )
         }
 
         getOption = name => (options[name] ? options[name] : this.props[name])
 
         getFirstPage = (flushData = false) => {
-            this.retrieveFromEndPoint(rawGet(this.state.path), flushData)
+            this.retrieveFromEndPoint(this.rawGet(this.state.path), flushData)
         }
 
         getLastPage = () => {
-            this.retrieveFromEndPoint(rawGet(this.pageFromIndex(this.state.lastPageIndex)))
+            this.retrieveFromEndPoint(this.rawGet(this.pageFromIndex(this.state.lastPageIndex)))
         }
 
         getNextPage = () => {
-            this.retrieveFromEndPoint(rawGet(this.state.nextPageUrl))
+            this.retrieveFromEndPoint(this.rawGet(this.state.nextPageUrl))
         }
 
         getPreviousPage = () => {
-            this.retrieveFromEndPoint(rawGet(this.state.previousPageUrl))
+            this.retrieveFromEndPoint(this.rawGet(this.state.previousPageUrl))
         }
 
         fetchOnInterval = () => this.getFirstPage(true)

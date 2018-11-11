@@ -1,6 +1,6 @@
 {
     "name": "with-laravel",
-    "version": "0.0.8",
+    "version": "0.0.13",
     "description": "A simple package exposing a bunch of HOC's for working with Laravel and React.",
     "main": "./lib/index.js",
     "scripts": {

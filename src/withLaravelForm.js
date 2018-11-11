@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _ from 'underscore'
 import S from 'string'
 
@@ -36,11 +37,19 @@ import S from 'string'
 
 function withLaravelForm(
     EnhancedComponent,
-    options = { endPoint: null, takeAtLeast: null, params: null },
+    options = { endPoint: null, takeAtLeast: null, params: null, formName: null },
 ) {
     return class LaravelForm extends Component {
+        static propTypes = {
+            onFormSuccess: PropTypes.func,
+            onFormFail: PropTypes.func,
+        }
+
         static defaultProps = {
             takeAtLeast: 400,
+            formName: Math.random(),
+            onFormSuccess: response => response,
+            onFormFail: response => response,
         }
 
         constructor(props) {
@@ -60,11 +69,17 @@ function withLaravelForm(
         }
 
         componentDidMount() {
-            document.body.addEventListener('keydown', (e) => {
-                if (e.keyCode === 13 && e.metaKey) {
-                    this.submitForm(e)
-                }
-            })
+            this.form.addEventListener('keydown', this.bindListener)
+        }
+
+        componentWillUnmoutn() {
+            this.form.removeEventListener('keydown', this.bindListener)
+        }
+
+        bindListener = (e) => {
+            if (e.keyCode === 13 && e.metaKey) {
+                this.submitForm(e)
+            }
         }
 
         getTextFieldProps = name => ({
@@ -135,6 +150,10 @@ function withLaravelForm(
             }))
         }
 
+        emptyFormFields = () => {
+            this.form.reset()
+        }
+
         submitForm = (event) => {
             event.preventDefault()
             this.setState({ sending: true })
@@ -147,10 +166,13 @@ function withLaravelForm(
 
             this.getOption('endPoint')(...args)
                 .takeAtLeast(this.getOption('takeAtLeast'))
-                .then(() => {
+                .then((data) => {
                     this.setState({ sending: false, errors: [], success: true })
+                    this.props.onFormSucess(data)
+                    this.emptyFormFields()
                 })
                 .catch((response) => {
+                    this.props.onFormFail(response)
                     if (response.response.status === 422) {
                         this.setState(
                             () => ({
@@ -196,6 +218,7 @@ function withLaravelForm(
 
             return (
                 <form
+                  name={this.props.formName}
                   onSubmit={this.submitForm}
                   ref={(formElement) => {
                       this.form = formElement
